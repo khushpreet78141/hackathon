@@ -1,7 +1,5 @@
 import { motion } from "framer-motion";
-
 import { Link, useNavigate } from "react-router-dom";
-
 export default function PublicNavbar() {
 
   const navigate = useNavigate();
@@ -33,6 +31,7 @@ export default function PublicNavbar() {
           <Link to="/" className="hover:text-cyan-400 transition">Home</Link>
           <Link to="/about" className="hover:text-cyan-400 transition">About</Link>
           <Link to="/contact" className="hover:text-cyan-400 transition">Contact</Link>
+          <Link to="/profile" className="hover:text-cyan-400 transition">Profile</Link>
 
           {/*<a href="#" className=>
             About
