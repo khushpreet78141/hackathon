@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export default function LandingPage(){
 
   const navigate = useNavigate();
-  navigate("/dashboard")
+
   const features = [
     {
       title:"Influence Heatmap",
@@ -36,21 +36,27 @@ export default function LandingPage(){
 
       <PublicNavbar/>
 
-
       {/* HERO SECTION */}
 
       <section className="relative flex flex-col items-center text-center py-32 px-6">
 
         <motion.div
-          className="absolute w-[500px] h-[500px] bg-cyan-500/20 blur-[140px]"
-          animate={{scale:[1,1.2,1]}}
-          transition={{duration:6, repeat:Infinity}}
+          className="absolute w-[400px] h-[400px] bg-cyan-500/20 blur-[90px]"
+          animate={{
+            scale:[1,1.1,1],
+            opacity:[0.5,0.7,0.5]
+          }}
+          transition={{
+            duration:6,
+            repeat:Infinity,
+            ease:"easeInOut"
+          }}
         />
 
         <motion.h1
           initial={{opacity:0, y:40}}
           animate={{opacity:1, y:0}}
-          transition={{duration:1}}
+          transition={{duration:0.8, ease:"easeOut"}}
           className="text-6xl font-bold text-cyan-400 mb-6"
         >
           Detect Hidden Digital Manipulation
@@ -60,7 +66,7 @@ export default function LandingPage(){
         <motion.p
           initial={{opacity:0}}
           animate={{opacity:1}}
-          transition={{delay:0.4}}
+          transition={{delay:0.3, duration:0.8}}
           className="max-w-2xl text-gray-400 mb-8"
         >
           ShadowInfluence uses AI to analyze online text and reveal hidden
@@ -71,8 +77,9 @@ export default function LandingPage(){
         <motion.button
           whileHover={{scale:1.08}}
           whileTap={{scale:0.95}}
+          transition={{duration:0.2}}
           onClick={() => navigate("/auth")}
-          className="px-10 py-4 bg-cyan-500 text-black rounded-lg font-semibold shadow-lg shadow-cyan-500/40"
+          className="px-10 py-4 bg-cyan-500 text-black rounded-lg font-semibold shadow-lg shadow-cyan-500/40 transform-gpu"
         >
           Get Started
         </motion.button>
@@ -92,7 +99,8 @@ export default function LandingPage(){
         <motion.div
           initial={{opacity:0, y:40}}
           whileInView={{opacity:1, y:0}}
-          transition={{duration:1}}
+          viewport={{ once:true }}
+          transition={{duration:0.8, ease:"easeOut"}}
           className="max-w-4xl mx-auto bg-slate-900 p-8 rounded-xl border border-cyan-500/30"
         >
 
@@ -106,7 +114,8 @@ export default function LandingPage(){
             <motion.div
               initial={{width:0}}
               whileInView={{width:"72%"}}
-              transition={{duration:2}}
+              viewport={{ once:true }}
+              transition={{duration:1.5, ease:"easeOut"}}
               className="h-full bg-red-500"
             />
 
@@ -136,11 +145,15 @@ export default function LandingPage(){
 
             <motion.div
               key={index}
-              initial={{opacity:0, y:40}}
+              initial={{opacity:0, y:30}}
               whileInView={{opacity:1, y:0}}
-              whileHover={{scale:1.05}}
-              transition={{duration:0.5}}
-              className="bg-slate-900 p-6 rounded-xl border border-cyan-500/30"
+              viewport={{ once:true }}
+              whileHover={{
+                scale:1.05,
+                transition:{duration:0.2}
+              }}
+              transition={{duration:0.6, ease:"easeOut"}}
+              className="bg-slate-900 p-6 rounded-xl border border-cyan-500/30 transform-gpu will-change-transform"
             >
 
               <h3 className="text-xl font-semibold mb-3">
@@ -176,9 +189,10 @@ export default function LandingPage(){
 
             <motion.p
               key={index}
-              initial={{opacity:0}}
-              whileInView={{opacity:1}}
-              transition={{delay:index*0.5}}
+              initial={{opacity:0, x:-20}}
+              whileInView={{opacity:1, x:0}}
+              viewport={{ once:true }}
+              transition={{duration:0.4, delay:index*0.15}}
             >
               {log}
             </motion.p>
@@ -198,7 +212,8 @@ export default function LandingPage(){
         <motion.h2
           initial={{opacity:0}}
           whileInView={{opacity:1}}
-          transition={{duration:1}}
+          viewport={{ once:true }}
+          transition={{duration:0.8}}
           className="text-4xl text-cyan-400 mb-6"
         >
           Start Detecting Hidden Influence
@@ -207,8 +222,10 @@ export default function LandingPage(){
 
         <motion.button
           whileHover={{scale:1.1}}
+          whileTap={{scale:0.95}}
+          transition={{duration:0.2}}
           onClick={() => navigate("/auth")}
-          className="px-10 py-4 bg-cyan-500 text-black rounded-lg font-semibold shadow-lg shadow-cyan-500/40"
+          className="px-10 py-4 bg-cyan-500 text-black rounded-lg font-semibold shadow-lg shadow-cyan-500/40 transform-gpu"
         >
           Launch Analyzer
         </motion.button>
