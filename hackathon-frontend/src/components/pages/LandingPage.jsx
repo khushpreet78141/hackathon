@@ -82,7 +82,7 @@ export default function LandingPage() {
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => navigate("/auth")}
-          className="px-10 py-4 bg-cyan-500 text-black rounded-lg font-semibold shadow-lg shadow-cyan-500/40"
+          className="px-10 py-4 bg-cyan-500 text-black rounded-lg font-semibold shadow-lg shadow-cyan-500/40 transform-gpu"
         >
           Get Started
         </motion.button>
@@ -218,7 +218,7 @@ export default function LandingPage() {
         <motion.button
           whileHover={{ scale: 1.1 }}
           onClick={() => navigate("/auth")}
-          className="px-10 py-4 bg-cyan-500 text-black rounded-lg font-semibold shadow-lg shadow-cyan-500/40"
+          className="px-10 py-4 bg-cyan-500 text-black rounded-lg font-semibold shadow-lg shadow-cyan-500/40 transform-gpu"
         >
           Launch Analyzer
         </motion.button>
