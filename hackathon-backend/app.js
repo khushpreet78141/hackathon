@@ -6,6 +6,7 @@ import { errorHandler } from "./src/middleware/errorHandler.js";
 import analysisRoutes from "./src/routes/analysisRoutes.js";
 import trendRoutes from "./src/routes/trendRoutes.js";
 import imageAnalysisRoutes from "./src/routes/imageAnalysisRoutes.js";
+import contactRoutes from "./src/routes/contactRoutes.js";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -57,6 +58,7 @@ app.use("/api/analysis", analysisRoutes);
 app.use("/api/trends", trendRoutes);
 app.use('/api/auth', authRoute)
 app.use('/api/image-analysis', imageAnalysisRoutes);
+app.use("/api/contact", contactRoutes);
 
 /*
 ========================
