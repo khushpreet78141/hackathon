@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import PublicNavbar from "../PublicNavbar";
+import PublicNavbar from "./PublicNavbar";
 
 export default function ContactPage() {
 
@@ -74,6 +74,7 @@ export default function ContactPage() {
             whileHover={{scale:1.05}}
             whileTap={{scale:0.95}}
             className="px-8 py-3 bg-cyan-500 text-black rounded-lg font-semibold shadow-lg shadow-cyan-500/40"
+            
           >
             Send Message
           </motion.button>

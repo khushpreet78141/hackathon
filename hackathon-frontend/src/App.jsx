@@ -2,7 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LandingPage from "./components/pages/LandingPage";
 import DashboardPage from "./components/pages/DashboardPage";
-
+import ContactPage from "./components/pages/ContactPage";
+import AboutPage from "./components/pages/AboutPage";
 export default function App() {
 
   return (
@@ -16,6 +17,7 @@ export default function App() {
         {/* Dashboard */}
         <Route path="/dashboard" element={<DashboardPage />} />
          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/about" element={<AboutPage />} />
   <Route path="/dashboard" element={<DashboardPage />} />
 
       </Routes>
