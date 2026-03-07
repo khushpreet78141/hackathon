@@ -17,7 +17,7 @@ const MODEL_ID = "qwen/qwen2.5-vl-7b";
  */
 export const analyzeImageWithAI = async (imageBuffer, mimeType = "image/png") => {
     try {
-        console.log("Hitting AI Service at:", `${LLM_STUDIO_URL}/v1/chat/completions`);
+        //console.log("Hitting AI Service at:", `${LLM_STUDIO_URL}/v1/chat/completions`);
         const base64Image = imageBuffer.toString("base64");
         const dataUrl = `data:${mimeType};base64,${base64Image}`;
 
