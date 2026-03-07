@@ -6,8 +6,10 @@ import { errorHandler } from "./src/middleware/errorHandler.js";
 import analysisRoutes from "./src/routes/analysisRoutes.js";
 import trendRoutes from "./src/routes/trendRoutes.js";
 
-
+import dotenv from "dotenv";
+dotenv.config();
 const app = express();
+import authRoute from './src/routes/authRoutes.js'
 
 /*
 ========================
@@ -47,6 +49,7 @@ Routes
 
 app.use("/api/analysis", analysisRoutes);
 app.use("/api/trends", trendRoutes);
+app.use('/api/auth' , authRoute )
 
 /*
 ========================
