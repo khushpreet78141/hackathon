@@ -1,0 +1,40 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# macOS
+.DS_Store
+
+# Logs
+logs
+*.log
+
+# Environment files
+.env
+.env.*
+
+# Build output
+dist/
+build/
+out/
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS generated files
+Thumbs.db
+.DS_Store
+
+# Coverage
+coverage/
+*.lcov
+
+# Misc
+*.tgz
+*.zip
+*.tar
