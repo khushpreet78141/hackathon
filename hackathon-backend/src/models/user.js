@@ -24,13 +24,6 @@ const userSchema = new mongoose.Schema(
       required: true,
       select: false // never return by default
     },
-
-    role: {
-      type: String,
-      enum: ["user", "admin"],
-      default: "user"
-    },
-
     totalAnalyses: {
       type: Number,
       default: 0

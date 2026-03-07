@@ -5,9 +5,12 @@ import morgan from "morgan";
 import { errorHandler } from "./src/middleware/errorHandler.js";
 import analysisRoutes from "./src/routes/analysisRoutes.js";
 import trendRoutes from "./src/routes/trendRoutes.js";
+import imageAnalysisRoutes from "./src/routes/imageAnalysisRoutes.js";
 
-
+import dotenv from "dotenv";
+dotenv.config();
 const app = express();
+import authRoute from './src/routes/authRoutes.js'
 
 /*
 ========================
@@ -47,6 +50,8 @@ Routes
 
 app.use("/api/analysis", analysisRoutes);
 app.use("/api/trends", trendRoutes);
+app.use('/api/auth', authRoute)
+app.use('/api/image-analysis', imageAnalysisRoutes);
 
 /*
 ========================
