@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import axios from "axios";
 import { Image as ImageIcon, Upload, X, Search, FileText, ArrowRight } from "lucide-react";
 
-export default function InputSection() {
+export default function InputSection({ onAnalysisResult }) {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(null);
@@ -46,21 +46,24 @@ export default function InputSection() {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-          withCredentials: true
+          withCredentials: true,
         });
       } else {
         // JSON for text analysis
-        res = await axios.post("http://localhost:3000/api/analysis", {
-          text,
-        }, {
-          withCredentials: true
-        });
+        res = await axios.post(
+          "http://localhost:3000/api/analysis",
+          { text },
+          { withCredentials: true }
+        );
       }
 
       const data = res.data;
       console.log("Analysis Result:", data);
-      // You might want to update the dashboard state here with the result
 
+      // Pass result up to the dashboard
+      if (onAnalysisResult) {
+        onAnalysisResult(data);
+      }
     } catch (error) {
       console.error("Analysis error:", error);
       alert(error.response?.data?.message || "Analysis failed. Please try again.");
@@ -70,7 +73,7 @@ export default function InputSection() {
   };
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-md p-6 rounded-2xl border border-gray-700 shadow-xl">
+    <div className="bg-slate-900/70 backdrop-blur-md p-6 rounded-2xl border border-cyan-500/20 shadow-xl">
       <div className="flex items-center gap-2 mb-6">
         <Search className="text-cyan-400 w-5 h-5" />
         <h2 className="text-xl font-bold text-white tracking-tight">
@@ -92,7 +95,7 @@ export default function InputSection() {
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            className="w-full h-40 bg-slate-900 border border-gray-700 rounded-xl p-4 text-gray-200 placeholder-gray-600 focus:outline-none focus:border-cyan-500 transition-colors resize-none"
+            className="w-full h-40 bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 text-gray-200 placeholder-gray-600 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/30 transition-colors resize-none"
             placeholder="Paste suspicious text, article link, or social media post here..."
           />
         </div>
@@ -106,7 +109,7 @@ export default function InputSection() {
           {!preview ? (
             <div
               onClick={() => fileInputRef.current.click()}
-              className="w-full h-40 border-2 border-dashed border-gray-700 rounded-xl bg-slate-900/50 hover:bg-slate-900 hover:border-cyan-500/50 transition-all flex flex-col items-center justify-center cursor-pointer group"
+              className="w-full h-40 border-2 border-dashed border-slate-700/50 rounded-xl bg-slate-800/30 hover:bg-slate-800/60 hover:border-cyan-500/50 transition-all flex flex-col items-center justify-center cursor-pointer group"
             >
               <div className="p-3 bg-slate-800 rounded-full mb-3 group-hover:bg-cyan-500/10 transition-colors">
                 <Upload className="text-gray-500 group-hover:text-cyan-400 w-6 h-6" />
@@ -115,7 +118,7 @@ export default function InputSection() {
               <p className="text-xs text-gray-600 mt-1">PNG, JPG up to 5MB</p>
             </div>
           ) : (
-            <div className="w-full h-40 relative rounded-xl overflow-hidden bg-slate-900 border border-gray-700">
+            <div className="w-full h-40 relative rounded-xl overflow-hidden bg-slate-900 border border-slate-700/50">
               <img
                 src={preview}
                 alt="Upload Preview"
@@ -144,7 +147,7 @@ export default function InputSection() {
         <div className="flex items-center gap-4 text-xs text-gray-500 font-medium">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
-            V-Language Model Active
+            Gemini AI Active
           </div>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.5)]" />
@@ -176,8 +179,3 @@ export default function InputSection() {
     </div>
   );
 }
-
-
-
-
-

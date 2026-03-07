@@ -36,21 +36,17 @@ export const analyzeImageWithAI = async (imageBuffer, mimeType = "image/png") =>
                             {
                                 type: "text",
                                 text: `You are an AI fraud & spam detection system.
-Analyze the provided image carefully and determine whether it is:
-- "fraud"       – fake documents, forged IDs, phishing pages, counterfeit items
-- "spam"        – unsolicited ads, clickbait, scam promotions
-- "misleading"  – doctored / manipulated photos, out-of-context imagery, deepfakes
-- "legitimate"  – genuine, non-manipulated, harmless content
+Analyze the provided image carefully for manipulation, fraud, or spam.
 
-Return ONLY a valid JSON object (no markdown, no explanation outside JSON) with exactly these keys:
-{
-  "verdict": "fraud" | "spam" | "misleading" | "legitimate",
-  "confidence": <number 0-100>,
-  "risk_level": "low" | "medium" | "high" | "critical",
-  "explanation": "<one-paragraph reason>",
-  "red_flags": ["<flag1>", "<flag2>"]
-}
-If the image is legitimate, red_flags should be an empty array.`
+Return ONLY a valid JSON object strictly matching this schema:
+- manipulation_score: number 0-100 (degree of fraud/manipulation)
+- emotional_intensity: number 0-100 (how much it targets emotions)
+- bias_type: string (e.g., "financial scam", "misinformation", "none")
+- propaganda_techniques: array of strings (red flags or tactics used)
+- sentiment: "positive", "neutral", "negative"
+- risk_level: "low", "medium", "high", "critical"
+
+Analyze the image and return the JSON only.`
                             }
                         ]
                     }
@@ -78,36 +74,28 @@ If the image is legitimate, red_flags should be an empty array.`
             aiResult = JSON.parse(jsonStr);
         } catch (parseErr) {
             console.error("Failed to parse LLM Studio response as JSON:", rawText);
-            // Return a safe fallback so the endpoint doesn't crash
-            aiResult = {
-                verdict: "unknown",
-                confidence: 0,
-                risk_level: "medium",
-                explanation: "The AI model returned an unparseable response.",
-                red_flags: [],
-                raw_response: rawText
-            };
+            throw new Error("Invalid AI JSON response from image analysis");
         }
 
-        // Normalize / clamp values
-        const validVerdicts = ["fraud", "spam", "misleading", "legitimate"];
-        aiResult.verdict = validVerdicts.includes(aiResult.verdict?.toLowerCase())
-            ? aiResult.verdict.toLowerCase()
-            : "unknown";
+        // Normalize values to match Analysis schema
+        const riskMap = {
+            low: "Low",
+            medium: "Moderate",
+            high: "High",
+            critical: "Extreme"
+        };
+        const sentimentEnum = ["positive", "neutral", "negative"];
 
-        aiResult.confidence = Math.min(
-            Math.max(Number(aiResult.confidence) || 0, 0),
-            100
-        );
-
-        const validRisks = ["low", "medium", "high", "critical"];
-        aiResult.risk_level = validRisks.includes(aiResult.risk_level?.toLowerCase())
-            ? aiResult.risk_level.toLowerCase()
-            : "medium";
-
-        aiResult.red_flags = Array.isArray(aiResult.red_flags)
-            ? aiResult.red_flags
+        aiResult.risk_level = riskMap[aiResult.risk_level?.toLowerCase()] || "Moderate";
+        aiResult.sentiment = sentimentEnum.includes(aiResult.sentiment?.toLowerCase())
+            ? aiResult.sentiment.toLowerCase()
+            : "neutral";
+        aiResult.propaganda_techniques = Array.isArray(aiResult.propaganda_techniques)
+            ? aiResult.propaganda_techniques
             : [];
+        aiResult.manipulation_score = Math.min(Math.max(Number(aiResult.manipulation_score) || 0, 0), 100);
+        aiResult.emotional_intensity = Math.min(Math.max(Number(aiResult.emotional_intensity) || 0, 0), 100);
+        aiResult.bias_type = aiResult.bias_type || "none";
 
         return aiResult;
     } catch (error) {

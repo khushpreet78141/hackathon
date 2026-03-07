@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 
 import { errorHandler } from "./src/middleware/errorHandler.js";
 import analysisRoutes from "./src/routes/analysisRoutes.js";
@@ -20,6 +21,9 @@ Global Middlewares
 
 // JSON body parser
 app.use(express.json({ limit: "10kb" }));
+
+// Cookie parser
+app.use(cookieParser());
 
 // Enable CORS
 app.use(cors(
