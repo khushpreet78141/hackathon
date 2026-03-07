@@ -11,9 +11,9 @@ export default function ContactPage() {
       <div className="max-w-5xl mx-auto px-6 py-24">
 
         <motion.div
-          initial={{opacity:0, y:30}}
-          animate={{opacity:1, y:0}}
-          transition={{duration:0.8}}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
 
@@ -31,9 +31,9 @@ export default function ContactPage() {
 
         {/* Contact Form */}
         <motion.form
-          initial={{opacity:0, y:40}}
-          whileInView={{opacity:1, y:0}}
-          transition={{duration:0.8}}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
           className="bg-slate-900 p-10 rounded-xl border border-cyan-500/20 space-y-6"
         >
 
@@ -71,8 +71,8 @@ export default function ContactPage() {
 
 
           <motion.button
-            whileHover={{scale:1.05}}
-            whileTap={{scale:0.95}}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             className="px-8 py-3 bg-cyan-500 text-black rounded-lg font-semibold shadow-lg shadow-cyan-500/40"
             
           >
