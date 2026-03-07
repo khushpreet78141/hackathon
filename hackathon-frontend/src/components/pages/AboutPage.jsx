@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import PublicNavbar from "../public/PublicNavbar";
+import PublicNavbar from "./PublicNavbar";
 
 export default function AboutPage() {
   return (
