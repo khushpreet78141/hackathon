@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LandingPage from "./components/pages/LandingPage";
 import DashboardPage from "./components/pages/DashboardPage";
+import ContactPage from "./components/pages/ContactPage";
+import Login from "./components/Login";
+import Register from "./components/Register";
 
 export default function App() {
 
@@ -10,13 +13,17 @@ export default function App() {
 
       <Routes>
 
-        {/* Overview Page */}
+        {/* Public Pages */}
         <Route path="/" element={<LandingPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+
+        {/* Auth Pages */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/auth" element={<Login />} />
 
         {/* Dashboard */}
         <Route path="/dashboard" element={<DashboardPage />} />
-         <Route path="/contact" element={<ContactPage />} />
-  <Route path="/dashboard" element={<DashboardPage />} />
 
       </Routes>
 

@@ -22,7 +22,12 @@ Global Middlewares
 app.use(express.json({ limit: "10kb" }));
 
 // Enable CORS
-app.use(cors());
+app.use(cors(
+  {
+    origin: true,
+    credentials: true
+  }
+));
 
 // HTTP request logger
 if (process.env.NODE_ENV === "development") {
