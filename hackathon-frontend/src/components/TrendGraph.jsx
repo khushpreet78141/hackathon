@@ -39,6 +39,7 @@ export default function TrendGraph({ trendData }) {
     },
   };
 
+  
   return (
     <div className="bg-slate-900/70 backdrop-blur-md p-6 rounded-2xl border border-cyan-500/20 shadow-xl">
       <h2 className="text-lg font-bold text-white mb-4">
