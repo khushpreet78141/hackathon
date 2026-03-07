@@ -1,11 +1,7 @@
 import { motion } from "framer-motion";
-<<<<<<< HEAD
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-=======
+
 import { Link, useNavigate } from "react-router-dom";
 
->>>>>>> ccc8a2cd6c623b116cace9916a0c7aea335f00cb
 export default function PublicNavbar() {
 
   const navigate = useNavigate();
