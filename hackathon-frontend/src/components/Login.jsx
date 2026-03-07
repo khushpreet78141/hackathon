@@ -3,9 +3,11 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { ShieldCheck, Mail, Lock, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -27,7 +29,8 @@ export default function Login() {
                 { withCredentials: true }
             );
             setSuccess("Login successful! Redirecting...");
-            console.log(res.data);
+            // Store user in global auth context
+            login(res.data.user);
             setTimeout(() => navigate("/dashboard"), 1200);
         } catch (err) {
             setError(err.response?.data?.message || "Login failed. Please try again.");

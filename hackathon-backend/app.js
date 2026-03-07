@@ -24,7 +24,7 @@ Global Middlewares
 app.use(express.json({ limit: "10kb" }));
 
 // Cookie parser
-import cookieParser from "cookie-parser";
+
 app.use(cookieParser());
 
 // Enable CORS

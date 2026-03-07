@@ -1,1 +1,76 @@
 @import "tailwindcss";
+
+/* ─── Theme CSS Variables ─── */
+
+:root,
+[data-theme="cyan"] {
+    --accent: 6 182 212;
+    /* cyan-500 */
+    --accent-hex: #06b6d4;
+    --accent-light: 34 211 238;
+    /* cyan-400 */
+    --accent-light-hex: #22d3ee;
+    --accent-dark: 8 145 178;
+    /* cyan-600 */
+    --accent-glow: rgba(6, 182, 212, 0.3);
+    --accent-shadow: rgba(6, 182, 212, 0.25);
+    --accent-border: rgba(6, 182, 212, 0.2);
+    --accent-bg: rgba(6, 182, 212, 0.1);
+}
+
+[data-theme="red"] {
+    --accent: 239 68 68;
+    /* red-500 */
+    --accent-hex: #ef4444;
+    --accent-light: 248 113 113;
+    /* red-400 */
+    --accent-light-hex: #f87171;
+    --accent-dark: 220 38 38;
+    /* red-600 */
+    --accent-glow: rgba(239, 68, 68, 0.3);
+    --accent-shadow: rgba(239, 68, 68, 0.25);
+    --accent-border: rgba(239, 68, 68, 0.2);
+    --accent-bg: rgba(239, 68, 68, 0.1);
+}
+
+/* ─── Utility classes using CSS variables ─── */
+
+.text-accent {
+    color: rgb(var(--accent));
+}
+
+.text-accent-light {
+    color: rgb(var(--accent-light));
+}
+
+.bg-accent {
+    background-color: rgb(var(--accent));
+}
+
+.bg-accent\/10 {
+    background-color: rgba(var(--accent), 0.1);
+}
+
+.bg-accent\/20 {
+    background-color: rgba(var(--accent), 0.2);
+}
+
+.border-accent {
+    border-color: rgb(var(--accent));
+}
+
+.border-accent\/20 {
+    border-color: rgba(var(--accent), 0.2);
+}
+
+.border-accent\/30 {
+    border-color: rgba(var(--accent), 0.3);
+}
+
+.shadow-accent {
+    box-shadow: 0 10px 25px -5px var(--accent-shadow);
+}
+
+.ring-accent\/30 {
+    --tw-ring-color: rgba(var(--accent), 0.3);
+}

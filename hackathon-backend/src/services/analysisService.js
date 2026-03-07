@@ -35,7 +35,7 @@ export const runAnalysis = async (userId, text) => {
 };
 
 export const fetchUserAnalyses = async (userId) => {
-  return Analysis.find({ userId }).sort({ createdAt: -1 }).limit(20);
+  return Analysis.find({ userId }).sort({ createdAt: -1 }).limit(100);
 };
 
 export const fetchSingleAnalysis = async (analysisId, userId) => {

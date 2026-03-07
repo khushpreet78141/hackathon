@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import axios from "axios";
-import { Image as ImageIcon, Upload, X, Search, FileText, ArrowRight } from "lucide-react";
+import { Image as ImageIcon, Upload, X, Search, FileText, ArrowRight, Lock } from "lucide-react";
 
 export default function InputSection({ onAnalysisResult }) {
   const [text, setText] = useState("");
@@ -9,10 +9,13 @@ export default function InputSection({ onAnalysisResult }) {
   const [preview, setPreview] = useState(null);
   const fileInputRef = useRef(null);
 
+  const isImageMode = !!file;
+
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
       setFile(selectedFile);
+      setText(""); // Clear text when switching to image mode
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result);
@@ -35,21 +38,14 @@ export default function InputSection({ onAnalysisResult }) {
       let res;
 
       if (file) {
-        // multipart/form-data for image analysis
         const formData = new FormData();
         formData.append("image", file);
-        if (text.trim()) {
-          formData.append("text", text);
-        }
 
         res = await axios.post("http://localhost:3000/api/image-analysis", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          headers: { "Content-Type": "multipart/form-data" },
           withCredentials: true,
         });
       } else {
-        // JSON for text analysis
         res = await axios.post(
           "http://localhost:3000/api/analysis",
           { text },
@@ -60,7 +56,6 @@ export default function InputSection({ onAnalysisResult }) {
       const data = res.data;
       console.log("Analysis Result:", data);
 
-      // Pass result up to the dashboard
       if (onAnalysisResult) {
         onAnalysisResult(data);
       }
@@ -83,21 +78,39 @@ export default function InputSection({ onAnalysisResult }) {
 
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Text Input */}
-        <div className="space-y-2">
+        <div className="space-y-2 relative">
           <div className="flex items-center justify-between px-1">
             <span className="text-xs font-semibold text-gray-500 uppercase flex items-center gap-1">
               <FileText className="w-3 h-3" /> Text Content
             </span>
-            <span className="text-xs text-gray-500">
-              {text.length}/3000
-            </span>
+            {isImageMode ? (
+              <span className="text-xs text-amber-400 flex items-center gap-1">
+                <Lock className="w-3 h-3" /> Image mode active
+              </span>
+            ) : (
+              <span className="text-xs text-gray-500">
+                {text.length}/3000
+              </span>
+            )}
           </div>
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            className="w-full h-40 bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 text-gray-200 placeholder-gray-600 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/30 transition-colors resize-none"
-            placeholder="Paste suspicious text, article link, or social media post here..."
-          />
+          <div className="relative">
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              disabled={isImageMode}
+              className={`w-full h-40 bg-slate-800/60 border border-slate-700/50 rounded-xl p-4 text-gray-200 placeholder-gray-600 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/30 transition-colors resize-none
+                ${isImageMode ? "opacity-40 cursor-not-allowed" : ""}`}
+              placeholder={isImageMode ? "Text input disabled — remove the image to type text" : "Paste suspicious text, article link, or social media post here..."}
+            />
+            {isImageMode && (
+              <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-slate-900/30 backdrop-blur-[1px]">
+                <div className="flex items-center gap-2 text-amber-400/80 text-sm font-medium">
+                  <Lock className="w-4 h-4" />
+                  Image uploaded — text disabled
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Image Input */}
@@ -118,7 +131,7 @@ export default function InputSection({ onAnalysisResult }) {
               <p className="text-xs text-gray-600 mt-1">PNG, JPG up to 5MB</p>
             </div>
           ) : (
-            <div className="w-full h-40 relative rounded-xl overflow-hidden bg-slate-900 border border-slate-700/50">
+            <div className="w-full h-40 relative rounded-xl overflow-hidden bg-slate-900 border border-cyan-500/30">
               <img
                 src={preview}
                 alt="Upload Preview"
@@ -130,6 +143,9 @@ export default function InputSection({ onAnalysisResult }) {
               >
                 <X className="w-4 h-4" />
               </button>
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+                <p className="text-xs text-cyan-300 font-medium truncate">{file?.name}</p>
+              </div>
             </div>
           )}
 
@@ -151,7 +167,7 @@ export default function InputSection({ onAnalysisResult }) {
           </div>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-cyan-500 shadow-[0_0_8px_rgba(6,182,212,0.5)]" />
-            Shadow Scanner Ready
+            {isImageMode ? "Vision Mode" : "Text Mode"}
           </div>
         </div>
 
@@ -166,11 +182,11 @@ export default function InputSection({ onAnalysisResult }) {
           {loading ? (
             <>
               <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-              Processing...
+              Analyzing...
             </>
           ) : (
             <>
-              Run Deep Analysis
+              {isImageMode ? "Analyze Image" : "Analyze Text"}
               <ArrowRight className="w-4 h-4" />
             </>
           )}

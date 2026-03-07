@@ -1,4 +1,4 @@
-import { extractTextFromImage } from "../services/visionService.js";
+import { extractTextFromImage, describeImage } from "../services/visionService.js";
 import { analyzeWithAI } from "../services/aiService.js";
 import Analysis from "../models/analysis.js";
 import User from "../models/user.js";
@@ -6,8 +6,8 @@ import { updateTrend } from "../services/trendService.js";
 
 /**
  * POST /api/image-analysis
- * Accepts a multipart image upload, extracts text via Gemini Vision,
- * runs manipulation analysis via Gemini AI, and optionally saves to DB.
+ * Accepts a multipart image upload, describes the image via Gemini Vision,
+ * extracts text, runs manipulation analysis, and optionally saves to DB.
  */
 export const analyzeImage = async (req, res, next) => {
     try {
@@ -18,21 +18,29 @@ export const analyzeImage = async (req, res, next) => {
             });
         }
 
-        // Step 1: Extract text from image using Gemini Vision
-        const extractedText = await extractTextFromImage(req.file.buffer);
+        const mimeType = req.file.mimetype || "image/png";
 
-        if (!extractedText || extractedText.trim().length === 0) {
-            return res.status(400).json({
-                success: false,
-                message: "Could not extract any text from the image."
-            });
-        }
+        // Step 1: Describe the image and extract text in parallel
+        const [imageDescription, extractedText] = await Promise.all([
+            describeImage(req.file.buffer, mimeType),
+            extractTextFromImage(req.file.buffer, mimeType)
+        ]);
 
-        // Step 2: Analyze extracted text using Gemini AI (aiService)
-        const aiResult = await analyzeWithAI(extractedText);
+        // Combine description + extracted text for AI analysis
+        const combinedText = `
+[IMAGE DESCRIPTION]:
+${imageDescription}
+
+[EXTRACTED TEXT FROM IMAGE]:
+${extractedText || "No text found in the image."}
+`.trim();
+
+        // Step 2: Analyze with Gemini AI
+        const aiResult = await analyzeWithAI(combinedText);
 
         let responseData = {
-            extractedText,
+            imageDescription,
+            extractedText: extractedText || "",
             ...aiResult
         };
 
@@ -40,7 +48,7 @@ export const analyzeImage = async (req, res, next) => {
         if (req.user) {
             const analysis = await Analysis.create({
                 userId: req.user._id,
-                originalText: extractedText.substring(0, 3000),
+                originalText: combinedText.substring(0, 3000),
                 manipulationScore: aiResult.manipulation_score,
                 emotionalIntensity: aiResult.emotional_intensity,
                 biasType: aiResult.bias_type,
@@ -49,14 +57,12 @@ export const analyzeImage = async (req, res, next) => {
                 riskLevel: aiResult.risk_level
             });
 
-            // Update user stats
             await User.findByIdAndUpdate(req.user._id, { $inc: { totalAnalyses: 1 } });
-
-            // Update daily trend
             await updateTrend(req.user._id, aiResult.manipulation_score, aiResult.emotional_intensity);
 
             responseData = {
-                extractedText,
+                imageDescription,
+                extractedText: extractedText || "",
                 analysis
             };
         }

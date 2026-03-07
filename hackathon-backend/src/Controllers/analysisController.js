@@ -40,7 +40,7 @@ export const analyzeText = async (req, res, next) => {
  */
 export const getUserAnalyses = async (req, res) => {
 
-  const analyses = await fetchUserAnalyses(userId);
+  const analyses = await fetchUserAnalyses(req.user._id);
 
   res.status(200).json({
     success: true,
