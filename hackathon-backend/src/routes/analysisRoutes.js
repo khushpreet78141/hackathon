@@ -12,7 +12,7 @@ import { analyzeScreenshot } from "../controllers/screenshotController.js";
 
 import upload from "../middleware/upload.js";
 
-import { protect, authorize } from "../middleware/authMiddleware.js";
+import { protect, authorize, optionalProtect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -22,6 +22,7 @@ const router = express.Router();
  */
 router.post(
   "/",
+  optionalProtect,
   asyncHandler(analyzeText)
 );
 
@@ -31,6 +32,7 @@ router.post(
  */
 router.post(
   "/screenshot",
+  optionalProtect,
   upload.single("image"),
   asyncHandler(analyzeScreenshot)
 );

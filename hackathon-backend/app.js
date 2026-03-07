@@ -1,11 +1,13 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 
 import { errorHandler } from "./src/middleware/errorHandler.js";
 import analysisRoutes from "./src/routes/analysisRoutes.js";
 import trendRoutes from "./src/routes/trendRoutes.js";
 import imageAnalysisRoutes from "./src/routes/imageAnalysisRoutes.js";
+import contactRoutes from "./src/routes/contactRoutes.js";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -20,6 +22,9 @@ Global Middlewares
 
 // JSON body parser
 app.use(express.json({ limit: "10kb" }));
+
+// Cookie parser
+app.use(cookieParser());
 
 // Enable CORS
 app.use(cors(
@@ -57,6 +62,7 @@ app.use("/api/analysis", analysisRoutes);
 app.use("/api/trends", trendRoutes);
 app.use('/api/auth', authRoute)
 app.use('/api/image-analysis', imageAnalysisRoutes);
+app.use("/api/contact", contactRoutes);
 
 /*
 ========================

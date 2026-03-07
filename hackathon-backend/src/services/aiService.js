@@ -25,6 +25,7 @@ Return JSON strictly matching this schema:
 - propaganda_techniques: array of strings
 - sentiment: "positive", "neutral", "negative"
 - risk_level: "low", "medium", "high", "critical"
+- explanation: string (a detailed paragraph explaining the analysis — why it is or isn't manipulative, what techniques were found, and advice for the reader)
 
 Analyze the following text:
 
@@ -45,7 +46,8 @@ ${text}
             bias_type: { type: "string" },
             propaganda_techniques: { type: "array", items: { type: "string" } },
             sentiment: { type: "string", enum: ["positive", "neutral", "negative"] },
-            risk_level: { type: "string", enum: ["low", "medium", "high", "critical"] }
+            risk_level: { type: "string", enum: ["low", "medium", "high", "critical"] },
+            explanation: { type: "string" }
           },
           required: [
             "manipulation_score",
@@ -53,7 +55,8 @@ ${text}
             "bias_type",
             "propaganda_techniques",
             "sentiment",
-            "risk_level"
+            "risk_level",
+            "explanation"
           ]
         }
       }
