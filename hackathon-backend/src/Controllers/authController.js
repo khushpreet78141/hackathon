@@ -107,3 +107,30 @@ export async function logout(req, res) {
         res.status(500).json({ message: "Internal server error" });
     }
 }
+export async function changePassword(req, res) {
+    const { newPassword, otp } = req.body;
+
+    try {
+        const user = await User.findById(req.user.id).select('+password');
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Verify OTP instead of current password
+        const validOtp = await OTP.findOne({ email: user.email, otp });
+        if (!validOtp) {
+            return res.status(400).json({ message: "Invalid or expired OTP" });
+        }
+
+        // Hash and update new password
+        const hashedNewPassword = await bcryptjs.hash(newPassword, 10);
+        user.password = hashedNewPassword;
+        await user.save();
+
+        res.status(200).json({ message: "Password updated successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}

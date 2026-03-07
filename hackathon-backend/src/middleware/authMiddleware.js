@@ -22,22 +22,24 @@ export const protect = async (req, res, next) => {
     token = req.cookies.token;
   }
 
-  if (!token) {
-    return next(new AppError("Not authorized, no token", 401));
-  }
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id).select("-password");
+      // fetch user from database
+      const user = await User.findById(decoded.id).select("-password");
 
-    if (!user) {
-      return next(new AppError("User not found", 404));
+      if (!user) {
+        return next(new AppError("User not found", 404));
+      }
+
+      req.user = user;
+      next();
+    } catch (error) {
+      return next(new AppError("Not authorized, token failed", 401));
     }
-
-    req.user = user;
-    next();
-  } catch (error) {
-    return next(new AppError("Not authorized, token failed", 401));
+  } else {
+    return next(new AppError("Not authorized, no token", 401));
   }
 };
 

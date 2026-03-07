@@ -16,11 +16,13 @@ export default function App() {
         {/* Public Pages */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/about" element={<AboutPage />} />
 
         {/* Auth Pages */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/auth" element={<Login />} />
+        <Route path="/profile" element={<ProfilePage />} />
 
         {/* Dashboard */}
         <Route path="/dashboard" element={<DashboardPage />} />
