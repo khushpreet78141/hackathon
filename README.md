@@ -124,16 +124,6 @@ It combines **Natural Language Processing (NLP)** and **pattern detection models
 
 ---
 
-## 🚀 Installation
-
-```bash
-git clone https://github.com/your-username/shadow-influence.git
-cd shadow-influence
-npm install
-npm run dev
-```
-
----
 
 ## 🔐 Use Cases
 
